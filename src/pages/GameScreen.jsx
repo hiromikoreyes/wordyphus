@@ -1,32 +1,53 @@
 import React, { useEffect, useState } from "react";
 import useCountdown from "../hooks/useCountdown";
-import useSound from 'use-sound';
-import { Box, Typography, Button } from "@mui/material";
+import { Modal, Box, Typography, Button } from "@mui/material";
+import tickSound from "../assets/tick.mp3"
+import beepSound from "../assets/beep.mp3"
 
 export default function GameScreen({setPage}){
 
     const [score, setScore] = useState(0)
-    const [startGame, setStartGame] = useState(false)
+    const [gameIsStarted, setGameIsStarted] = useState(false)
     const StartTimer = useCountdown()
     const GameTimer = useCountdown()
 
-    
+    function playTickSound(){
+        new Audio(tickSound).play()
+    }
+
+    function playBeepSound(){
+        new Audio(beepSound).play()
+    }
 
     useEffect(() => {
-        console.log(StartTimer)
         StartTimer.start(3)
     }, [])
 
-
     //audio effect
     useEffect(() => {
-        if(StartTimer.secondsLeft > 0){
-            
-        } else {
 
+        if(StartTimer.secondsLeft > 0){
+            playTickSound()
+        } else {
+            setGameIsStarted(true)
+            console.log(gameIsStarted)
+            GameTimer.start(60)
         }
 
     }, [StartTimer.secondsLeft])
+
+    useEffect(() => {
+        console.log(GameTimer.secondsLeft)
+        if(!gameIsStarted) return;
+
+        if(GameTimer.secondsLeft === 60){
+            playBeepSound()
+        }
+
+    }, [GameTimer.secondsLeft])
+
+
+
 
     const style = {
         position: 'absolute',
@@ -42,7 +63,8 @@ export default function GameScreen({setPage}){
 
     return (<>
 
-        <Box sx={style} className="rounded-lg">
+
+{ (StartTimer.secondsLeft !== 0) && <Box sx={style} className="rounded-lg" >
             <div className="h-24 m-0 p-0 w-full text-white text-6xl"> 
                 {StartTimer.secondsLeft}
             </div>
@@ -56,8 +78,8 @@ export default function GameScreen({setPage}){
             2. You will also be given 60 seconds on your timer<br/>
             3. Each guess earns you a point as well as 2 extra seconds on your timer
           </Typography>
-        </Box>
-
+        </Box>}
+     
         <div className="rounded-xl flex justify-center" style={{height: "54rem", width: "48rem", backgroundColor: "#b5b5b5", margin: "-1.5rem 0 0 0"}}>
         </div>
     </>)
