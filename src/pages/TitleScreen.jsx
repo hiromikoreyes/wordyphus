@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 
 
-export default function TitleScreen() {
+export default function TitleScreen({setPage}) {
   const [sispyhusSpeed, setSisyphusSpeed] = useState("sisyphus-animation-slow");
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -70,7 +70,7 @@ export default function TitleScreen() {
 
     <div>
       <img
-        class={sispyhusSpeed}
+        className={sispyhusSpeed}
         src={sisyphusImage}
         alt="one must imagine sisyphus happy"
       />
@@ -103,6 +103,7 @@ export default function TitleScreen() {
           <button
             className="w-36 h-12 text-1xl font-bold border-white"
             style={{}}
+            onClick={() => {setPage("GameScreen")}}
           >
             Play
           </button>
