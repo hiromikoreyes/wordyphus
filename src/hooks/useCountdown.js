@@ -18,6 +18,12 @@ export default function useCountdown(){
         setSecondsLeft(seconds)
     }
 
+    function add(seconds){
+        setSecondsLeft(() => {
+            return secondsLeft + seconds
+        })
+    }
+
     return { secondsLeft, start };
 
 }

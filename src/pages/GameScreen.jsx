@@ -5,6 +5,7 @@ import tickSound from "../assets/tick.mp3"
 import beepSound from "../assets/beep.mp3"
 import lockSound from "../assets/lock.mp3"
 import sisyphusGif from "../assets/200w.gif"
+import dictionary from "./dictionary.js"
 
 export default function GameScreen({setPage}){
 
@@ -28,6 +29,7 @@ export default function GameScreen({setPage}){
     useEffect(() => {
         StartTimer.start(1)
     }, [])
+
 
     //audio effect
     useEffect(() => {
@@ -61,16 +63,13 @@ export default function GameScreen({setPage}){
     const [currComponent, setCurrComponent] = useState("LA")
     const [currGuess, setCurrGuess] = useState("")
 
-
     function startGame(){
         setGameIsStarted(true)
-        console.log(gameIsStarted)
         GameTimer.start(61)
     }
 
     function endGame(){
         setGameIsStarted(false)
-        console.log(gameIsStarted)
         GameTimer.start(61)
     }
 
@@ -92,8 +91,16 @@ export default function GameScreen({setPage}){
 
     function submitWord(e){
         e.preventDefault()
+        if(dictionary[currGuess] === 1 && currGuess.includes(currComponent)){
+            correctAnswer()
+            setCurrGuess("")
+            changeCurrentComponent()
+        } else {
+            wrongAnswer()
+        }
 
     }
+
 
     const style = {
         position: 'absolute',
