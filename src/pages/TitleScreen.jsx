@@ -43,7 +43,8 @@ export default function TitleScreen({setPage}) {
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             1. You will be given a cluster of letters to create a word (THINK BOMB PARTY)<br/>
             2. You will also be given 60 seconds on your timer<br/>
-            3. Each guess earns you a point as well as 2 extra seconds on your timer
+            3. Each guess earns you a point, as well as 2 extra seconds on your timer
+            4. You cannot reuse words!
           </Typography>
           <hr className="my-4"></hr>
 

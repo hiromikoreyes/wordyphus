@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import useCountdown from "../hooks/useCountdown";
-import { Modal, Box, Typography, Grid } from "@mui/material";
+import { TextField, Box, Typography,  } from "@mui/material";
 import tickSound from "../assets/tick.mp3"
 import beepSound from "../assets/beep.mp3"
+import lockSound from "../assets/lock.mp3"
 import sisyphusGif from "../assets/200w.gif"
 
 export default function GameScreen({setPage}){
 
     const [score, setScore] = useState(0)
+    const [message, setMessage] = useState(`"One must imagine WORDYPHUS happy."`)
     const [gameIsStarted, setGameIsStarted] = useState(false)
     const StartTimer = useCountdown()
     const GameTimer = useCountdown()
@@ -19,9 +21,12 @@ export default function GameScreen({setPage}){
     function playBeepSound(){
         new Audio(beepSound).play()
     }
+    function playLockSound(){
+        new Audio(lockSound).play()
+    }
 
     useEffect(() => {
-        StartTimer.start(10)
+        StartTimer.start(1)
     }, [])
 
     //audio effect
@@ -30,9 +35,8 @@ export default function GameScreen({setPage}){
         if(StartTimer.secondsLeft > 0){
             playTickSound()
         } else {
-            setGameIsStarted(true)
-            console.log(gameIsStarted)
-            GameTimer.start(60)
+            startGame()
+
         }
 
     }, [StartTimer.secondsLeft])
@@ -45,10 +49,51 @@ export default function GameScreen({setPage}){
             playBeepSound()
         }
 
+        if(GameTimer.secondsLeft === 0){
+            endGame()
+        }
+
     }, [GameTimer.secondsLeft])
 
 
 
+    //Actual game logic
+    const [currComponent, setCurrComponent] = useState("LA")
+    const [currGuess, setCurrGuess] = useState("")
+
+
+    function startGame(){
+        setGameIsStarted(true)
+        console.log(gameIsStarted)
+        GameTimer.start(61)
+    }
+
+    function endGame(){
+        setGameIsStarted(false)
+        console.log(gameIsStarted)
+        GameTimer.start(61)
+    }
+
+
+    function correctAnswer(){
+        setScore(() => {
+            return score + 1
+        })
+        playTickSound()
+    }
+
+    function wrongAnswer(){
+        playLockSound()
+    }
+
+    function changeCurrentComponent(){
+        
+    }
+
+    function submitWord(e){
+        e.preventDefault()
+
+    }
 
     const style = {
         position: 'absolute',
@@ -74,26 +119,42 @@ export default function GameScreen({setPage}){
           <Typography  id="modal-modal-title" variant="h6" component="h2">
             Gameplay:
           </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+          <Typography id="modal-modal-description" className="text-start" sx={{ mt: 2 }}>
             1. You will be given a cluster of letters to create a word (THINK BOMB PARTY)<br/>
             2. You will also be given 60 seconds on your timer<br/>
-            3. Each guess earns you a point as well as 2 extra seconds on your timer
+            3. Each guess earns you a point, as well as 2 extra seconds on your timer<br/>
+            4. You cannot reuse words!
           </Typography>
         </Box>}
      
-        <div className="rounded-xl flex justify-center" style={{height: "54rem", width: "48rem", backgroundColor: "#2e3546", margin: "-1.5rem 0 0 0"}}>
-            <Grid>
-                <Grid item className="text-2xl p-12">
+        {(GameTimer.secondsLeft >= 0 && GameTimer.secondsLeft <= 60) && (<div className="rounded-xl flex flex-col  items-center " style={{height: "54rem", width: "48rem", backgroundColor: "#2e3546", margin: "-1.5rem 0 0 0"}}>
+                <div className="text-2xl pt-12">
                     {GameTimer.secondsLeft}
-                </Grid>
-                <Grid item className="h-fill flex justify-center">
-                        <img src={sisyphusGif}/>
-                </Grid>
-                <Grid item className="h-fill p-12 text-xl">
+                </div>
+                <div item className="p-12 text-xl">
                     Current Score: {score}
-                </Grid>
-            </Grid>
+                </div>
 
-        </div>
+                <div className="flex flex-col justify-center">
+                    <img src={sisyphusGif}/>
+                    {message}
+                </div>
+                <div item className="p-12 text-2xl">
+                    Spell a word with: <a> {currComponent} </a>
+                </div>
+                <form onSubmit={(e) => submitWord(e)}>
+                <TextField  
+                    type=""
+                    inputProps={{min: 0, style: { textAlign: 'center' }}} // the change is here
+                    value={currGuess}
+                    onChange={(e) => {
+                        const currGuessString = e.target.value.toUpperCase()
+                        setCurrGuess(currGuessString)
+                    }}
+                    placeholder="ENTER GUESS HERE"
+                    className="bg-white"
+                />
+                </form>
+        </div>)}
     </>)
 }
