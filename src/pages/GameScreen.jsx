@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import useCountdown from "../hooks/useCountdown";
-import { Modal, Box, Typography, Button } from "@mui/material";
+import { Modal, Box, Typography, Grid } from "@mui/material";
 import tickSound from "../assets/tick.mp3"
 import beepSound from "../assets/beep.mp3"
+import sisyphusGif from "../assets/200w.gif"
 
 export default function GameScreen({setPage}){
 
@@ -20,7 +21,7 @@ export default function GameScreen({setPage}){
     }
 
     useEffect(() => {
-        StartTimer.start(3)
+        StartTimer.start(10)
     }, [])
 
     //audio effect
@@ -80,7 +81,19 @@ export default function GameScreen({setPage}){
           </Typography>
         </Box>}
      
-        <div className="rounded-xl flex justify-center" style={{height: "54rem", width: "48rem", backgroundColor: "#b5b5b5", margin: "-1.5rem 0 0 0"}}>
+        <div className="rounded-xl flex justify-center" style={{height: "54rem", width: "48rem", backgroundColor: "#2e3546", margin: "-1.5rem 0 0 0"}}>
+            <Grid>
+                <Grid item className="text-2xl p-12">
+                    {GameTimer.secondsLeft}
+                </Grid>
+                <Grid item className="h-fill flex justify-center">
+                        <img src={sisyphusGif}/>
+                </Grid>
+                <Grid item className="h-fill p-12 text-xl">
+                    Current Score: {score}
+                </Grid>
+            </Grid>
+
         </div>
     </>)
 }
