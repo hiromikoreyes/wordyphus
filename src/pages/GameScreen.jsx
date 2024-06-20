@@ -101,6 +101,7 @@ export default function GameScreen({ setPage }) {
     });
     GameTimer.add(1);
     changeCurrentComponent()
+    addWordToUsedWords(currGuess)
     playTickSound();
   }
 
