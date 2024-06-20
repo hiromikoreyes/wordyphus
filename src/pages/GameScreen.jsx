@@ -116,8 +116,8 @@ export default function GameScreen({ setPage }) {
   }
 
   function addWordToUsedWords(word){
-    const guesses = structuredClone(alreadyGuessed)
-    Object.assign(guesses, {word: 1})
+    const guesses = alreadyGuessed;
+    guesses[word] = 1;
     setAlreadyGuessed(guesses)
   }
 
